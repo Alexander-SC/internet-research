@@ -1,5 +1,5 @@
 <?php
-include 'mysql_credintials.php';
+include 'mysql_credentials.php';
 $dbname = "ir_bookmarks";
 
 $connection = new mysqli($servername, $username, $password, $dbname);
