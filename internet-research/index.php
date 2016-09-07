@@ -12,9 +12,10 @@
 <header>
     <div style="text-align:center; font-size:150%; color:#004d4d;">Alex Toneka's</div>
     <div style="text-align:center; font-size:200%; color:#004d4d;">Research URLs</div>
+    <a href="http://localhost/phpmyadmin/" target="_blank" style="float:right;">phpMyAdmin</a>
 </header>
 
-<nav>    
+<nav style="clear:right;"> 
     <ul>
         <li><a href="index.php" class="active">Frequently Used</a></li>
         <li><a href="freelance.php">About Freelance</a></li>

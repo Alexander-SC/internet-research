@@ -9,7 +9,7 @@ if (isset($_POST['rtags'])) {
     $posttags = "";
 }
 
-$sql_insert = "INSERT INTO do_research (name, url, tags, notes)
+$sql_insert = "INSERT INTO about_freelance (name, url, tags, notes)
     VALUES ('$postname', '$posturl', '$posttags', '$postnotes')";
 
 if ($connection->query($sql_insert) === TRUE) {
