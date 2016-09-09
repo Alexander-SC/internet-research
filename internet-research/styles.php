@@ -5,6 +5,7 @@
     }
     
     div#all_wrap {
+        background-color:#f2f2f2;
         width:95%;
         margin-left:auto;
         margin-right:auto;
@@ -58,6 +59,8 @@
     }
     
     div#main_wrap {
+        background-color:#f2f2f2;
+        min-height:395px;
     }
         
     section#add_link_form {
@@ -106,13 +109,13 @@
         font-weight: bold;
     }     
     
-    section#tag_selection {
+    section.top-line {
         overflow:hidden;
         padding-top:5px;
         margin-bottom:5px;
     }
 
-    div#tag_selection_div {
+    div.top-line-content {
         width:99%;
         margin-left:auto;
      
@@ -149,7 +152,7 @@
         color:#ffffff;
     }
     
-    table#link_output th.name {
+    table#link_output th.title {
         width:175px;
     }
     

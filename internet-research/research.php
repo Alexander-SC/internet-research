@@ -27,10 +27,10 @@
     
 <section id="add_link_form">    
     <form action="research.php" method="post">
-        ADD LINKS:<br>
-        Name <input type="text" name="name"><br>
-        URL <input type="text" name="url"><br>
-        Tags<br>
+        ADD LINK<br>
+        <input type="text" name="name" placeholder="Title"autofocus><br>
+        <input type="text" name="url" placeholder="URL"><br>
+
         <div class="left_column">
         <input type="checkbox" id="rtag_health" name="rtags[]" value="Health"><label for="rtag_health">Health</label><br>
         <input type="checkbox" id="rtag_science" name="rtags[]" value="Science"><label for="rtag_science">Science</label><br>
@@ -59,7 +59,7 @@
         <input type="checkbox" id="rtag_" name="rtags[]" value=""><label for="rtag_"></label><br>
         <input type="checkbox" id="rtag_" name="rtags[]" value=""><label for="rtag_"></label><br>
         </div>
-        Notes <textarea name="notes" rows="5" cols="20"></textarea><br>
+        <textarea name="notes" rows="5" cols="20" placeholder="Notes"></textarea><br>
         <input style="width:55px;" type="submit" name="submit" value="Add">
     </form>
 
@@ -69,8 +69,8 @@
 ?>
 </section>
     
-<section id="tag_selection">
-    <div id="tag_selection_div">
+<section class="top-line">
+    <div class="top-line-content">
     Select tags: Health > Science > Business > Medicine > Data > Analytics > Statistics > E-Commerce > Database > Tools > Legal > Government > News > Patents > Drugs
     </div>
 </section>
@@ -82,7 +82,7 @@ $result_select = $connection->query($sql_select);
 if ($result_select->num_rows > 0) {?>
     <table id="link_output">
         <tr>
-            <th class="name">Name</th>
+            <th class="title">Title</th>
             <th class="tags">Tags</th>
             <th class="notes">Notes</th>
             <th class="delete">Delete</th>
@@ -95,7 +95,7 @@ if ($result_select->num_rows > 0) {?>
         } else {
             $rowname = "null";
         }
-        echo "<tr><td><a href=\"" . $row["URL"] . "\" class=\"bookmark\" target=\"_blank\">" . $rowname . "</a></td><td style=\"text-align:center;\">" . $row["tags"] . "</td><td>" . $row["notes"] . "</td>";
+        echo "<tr><td><a href=\"" . $row["URL"] . "\" class=\"bookmark\" target=\"_blank\"><img src=\"http://www.google.com/s2/favicons?domain=" . $row['URL'] . "\" height=\"16\" width=\"16\"> " . $rowname . "</a></td><td style=\"text-align:center;\">" . $row["tags"] . "</td><td>" . $row["notes"] . "</td>";
         echo "<td>delete</td></tr>";
     }
     ?></table><?php
@@ -106,7 +106,11 @@ $connection->close();
 ?>
 </section>
     
-</div>   
+</div>
+    
+<form id="filter_tags" method="get">
+    <input type="checkbox">
+</form>
     
 </div>
 
