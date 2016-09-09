@@ -7,11 +7,11 @@
 </head>  
 <body>
     
-<div class="container">    
+<div id="all_wrap">       
 
 <header>
-    <div style="text-align:center; font-size:150%; color:#004d4d;">Alex Toneka's</div>
-    <div style="text-align:center; font-size:200%; color:#004d4d;">Research URLs</div>
+    <div style="text-align:center; font-size:1.5em; color:#3399ff; font-weight:bold;">Alex Toneka's</div>
+    <div style="text-align:center; font-size:2.5em; color:#b3b3ff;">Research URLs</div>
     <a href="http://localhost/phpmyadmin/" target="_blank" style="float:right;">phpMyAdmin</a>
 </header>
 
@@ -22,8 +22,16 @@
         <li><a href="research.php">Do Research</a></li>
     </ul>
 </nav> 
+    
+<div id="main_wrap">
        
 <section id="add_link_form">    
+</section>
+    
+<section class="top-line">
+    <div class="top-line-content">
+    The world is ripe for the taking.
+    </div>
 </section>
 
 <section id="results_table">
@@ -33,6 +41,8 @@ Frequently used links for quick reference. Also, this will serve as a homepage f
 </section>
     
 </div>   
+    
+</div>
 
 </body>
 </html>

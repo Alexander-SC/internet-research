@@ -7,11 +7,11 @@
 </head>  
 <body>
     
-<div class="container">    
+<div id="all_wrap">       
 
 <header>
-    <div style="text-align:center; font-size:150%; color:#004d4d;">Alex Toneka's</div>
-    <div style="text-align:center; font-size:200%; color:#004d4d;">Freelance URLs</div>
+    <div style="text-align:center; font-size:1.5em; color:#3399ff; font-weight:bold;">Alex Toneka's</div>
+    <div style="text-align:center; font-size:2.5em; color:#b3b3ff;">Research URLs</div>
     <a href="http://localhost/phpmyadmin/" target="_blank" style="float:right;">phpMyAdmin</a>
 </header>
 
@@ -22,6 +22,8 @@
         <li><a href="research.php">Do Research</a></li>
     </ul>
 </nav>     
+    
+<div id="main_wrap">
        
 <section id="add_link_form">    
     <form action="freelance.php" method="post">
@@ -51,6 +53,12 @@
 ?>
 </section>
 
+<section class="top-line">
+    <div class="top-line-content">
+    Select tags: Web Dev > Freelance > Business > Medicine > Data > Analytics > Statistics > E-Commerce > Database > Tools > Legal > Government > News > Patents > Drugs
+    </div>
+</section>
+    
 <section id="results_table">
 <?php $sql_select = "SELECT name, URL, tags, notes FROM about_freelance";
 $result_select = $connection->query($sql_select);
@@ -84,7 +92,9 @@ $connection->close();
 
 </div>   
     
-Here I will place links that will aid me on the business side of things. Such as tutorials, learning opportunities, marketing, job searching, and business organization.
+
+    
+</div>
 
 </body>
 </html>
