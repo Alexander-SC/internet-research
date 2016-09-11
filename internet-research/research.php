@@ -1,3 +1,4 @@
+<?php session_start(); ?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -14,7 +15,8 @@
     <div style="text-align:center; font-size:2.5em; color:#b3b3ff;">Research URLs</div>
     <a href="http://localhost/phpmyadmin/" target="_blank" style="float:right;">phpMyAdmin</a>
 </header>
-
+    
+<!--navigation---------------------------------------------------------------------->
 <nav style="clear:right;">    
     <ul>
         <li><a href="index.php">Frequently Used</a></li>
@@ -32,9 +34,9 @@
         <input type="text" name="url" placeholder="URL"><br>
 
         <div class="left_column">
-        <input type="checkbox" id="rtag_health" name="rtags[]" value="Health"><label for="rtag_health">Health</label><br>
-        <input type="checkbox" id="rtag_science" name="rtags[]" value="Science"><label for="rtag_science">Science</label><br>
-        <input type="checkbox" id="rtag_business" name="rtags[]" value="Business"><label for="rtag_business">Business</label><br> 
+        <input type="checkbox" id="rtag_health" name="rtags[]" value="1"><label for="rtag_health">Health</label><br>
+        <input type="checkbox" id="rtag_powerhouse" name="rtags[]" value="17"><label for="rtag_powerhouse">Powerhouse</label><br>
+        <input type="checkbox" id="rtag_none_defined" name="rtags[]" value="19"><label for="rtag_none_defined">None defined</label><br> 
         <input type="checkbox" id="rtag_medicine" name="rtags[]" value="Medicine"><label for="rtag_medicine">Medicine</label><br> 
         <input type="checkbox" id="rtag_data" name="rtags[]" value="Data"><label for="rtag_data">Data</label><br> 
         <input type="checkbox" id="rtag_analytics" name="rtags[]" value="Analytics"><label for="rtag_analytics">Analytics</label><br> 
@@ -63,7 +65,7 @@
         <input style="width:55px;" type="submit" name="submit" value="Add">
     </form>
 
-<?php
+<?php $filter_tag1 = "Health"; $filter_tag2 = "Science";
     include 'mysqlconnect.php';
     if (isset($_POST['submit'])) {include 'submit_research_link.php';}
 ?>
@@ -75,30 +77,74 @@
     </div>
 </section>
 
+<!--results table---------------------------------------------------------------------->
 <section id="results_table">
-<?php $sql_select = "SELECT name, URL, tags, notes FROM do_research";
-$result_select = $connection->query($sql_select);
+<?php $sql_linking_tables = 
+"SELECT b.*, t.*
+FROM rbm_rtag_map bt, rbookmarks b, rtags t
+WHERE bt.rbm_map_id = b.rbm_id
+AND bt.rtag_map_id = t.rtag_id
+GROUP BY b.rbm_id";
+$result_linking_tables = $connection->query($sql_linking_tables);
 
-if ($result_select->num_rows > 0) {?>
+$sql_tags = 
+"SELECT b.rbm_id, t.rtag_name
+FROM rbm_rtag_map bt, rbookmarks b, rtags t
+WHERE bt.rtag_map_id = t.rtag_id
+AND bt.rbm_map_id = b.rbm_id";
+$result_tags = $connection->query($sql_tags);
+
+if ($result_linking_tables->num_rows > 0) {?>
     <table id="link_output">
         <tr>
             <th class="title">Title</th>
             <th class="tags">Tags</th>
             <th class="notes">Notes</th>
             <th class="delete">Delete</th>
-        </tr>
-        <?php while($row = $result_select->fetch_assoc()) {
-        if (!empty($row["name"])) {
-            $rowname = $row["name"];
-        } elseif (empty($row["name"]) && !empty($row["URL"])) {
-            $rowname = $row["URL"];
-        } else {
-            $rowname = "null";
+        </tr><?php
+    
+    
+        //BEGIN TO POPULATE THE ROWS
+        while($row = mysqli_fetch_assoc($result_linking_tables)) {
+            //DECLARE TITLE FOR TITLE CELL
+            if (!empty($row["rbm_title"])) {
+                $rowname = $row["rbm_title"];
+            } elseif (empty($row["rbm_title"]) && !empty($row["rbm_url"])) {
+                $rowname = $row["rbm_url"];
+            } else {
+                $rowname = "null";
+            }
+            
+            //DISPLAY TITLE
+            echo "<tr><td><a href=\"" . $row["rbm_url"] . 
+            "\" class=\"bookmark\" target=\"_blank\">
+            <img src=\"http://www.google.com/s2/favicons?domain=" . 
+            $row['rbm_url'] . "\" height=\"16\" width=\"16\"> " . 
+            $rowname . 
+            "</a></td>";
+            
+            //DISPLAY THE TAGS
+            echo "<td style=\"text-align:center;\">";                      
+            
+            $rbm_id = $row['rbm_id'];
+            
+            $sql_tag_map =
+            "SELECT bt.rmap_id, b.rbm_id, t.rtag_name 
+            FROM rbm_rtag_map bt, rbookmarks b, rtags t
+            WHERE bt.rtag_map_id = t.rtag_id
+            AND bt.rbm_map_id = b.rbm_id
+            AND b.rbm_id = $rbm_id";
+            $result_tag_map = $connection->query($sql_tag_map);
+            
+            while ($tagrow = mysqli_fetch_assoc($result_tag_map)) {
+                echo $tagrow['rtag_name'] . "--";
+            }
+            
+            //DISPLAY NOTES
+            echo "<td>" . $row["rbm_notes"] . "</td>";
+            echo "<td>delete</td></tr>";
         }
-        echo "<tr><td><a href=\"" . $row["URL"] . "\" class=\"bookmark\" target=\"_blank\"><img src=\"http://www.google.com/s2/favicons?domain=" . $row['URL'] . "\" height=\"16\" width=\"16\"> " . $rowname . "</a></td><td style=\"text-align:center;\">" . $row["tags"] . "</td><td>" . $row["notes"] . "</td>";
-        echo "<td>delete</td></tr>";
-    }
-    ?></table><?php
+        echo "</table>";
 } else {
     echo "0 results";
 }
