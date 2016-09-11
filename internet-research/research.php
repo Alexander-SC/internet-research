@@ -1,4 +1,4 @@
-<?php session_start(); ?>
+<?php session_start(); include 'mysqlconnect.php';?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -29,46 +29,65 @@
     
 <section id="add_link_form">    
     <form action="research.php" method="post">
-        ADD LINK<br>
-        <input type="text" name="name" placeholder="Title"autofocus><br>
-        <input type="text" name="url" placeholder="URL"><br>
+        <br>ADD LINK<br>
+        <input class="titleurl" type="text" name="name" placeholder="Title"autofocus>
+        <input class="titleurl" type="text" name="url" placeholder="URL">
 
+        
+<!--CHECKBOXES LEFT COLUMN----------------------------------------------------------->
         <div class="left_column">
-        <input type="checkbox" id="rtag_health" name="rtags[]" value="1"><label for="rtag_health">Health</label><br>
-        <input type="checkbox" id="rtag_powerhouse" name="rtags[]" value="17"><label for="rtag_powerhouse">Powerhouse</label><br>
-        <input type="checkbox" id="rtag_none_defined" name="rtags[]" value="19"><label for="rtag_none_defined">None defined</label><br> 
-        <input type="checkbox" id="rtag_medicine" name="rtags[]" value="Medicine"><label for="rtag_medicine">Medicine</label><br> 
-        <input type="checkbox" id="rtag_data" name="rtags[]" value="Data"><label for="rtag_data">Data</label><br> 
-        <input type="checkbox" id="rtag_analytics" name="rtags[]" value="Analytics"><label for="rtag_analytics">Analytics</label><br> 
-        <input type="checkbox" id="rtag_statistics" name="rtags[]" value="Statistics"><label for="rtag_statistics">Statistics</label><br> 
-        <input type="checkbox" id="rtag_ecommerce" name="rtags[]" value="E-commerce"><label for="rtag_ecommerce">E-Commerce</label><br> 
-        <input type="checkbox" id="rtag_database" name="rtags[]" value="Database"><label for="rtag_database">Database</label><br> 
-        <input type="checkbox" id="rtag_tools" name="rtags[]" value="Tools"><label for="rtag_tools">Tools</label><br> 
-        <input type="checkbox" id="rtag_legal" name="rtags[]" value="Legal"><label for="rtag_legal">Legal</label><br> 
-        <input type="checkbox" id="rtag_government" name="rtags[]" value="Government"><label for="rtag_government">Government</label><br> 
-        </div>
-        <div class="right_column">
-        <input type="checkbox" id="rtag_news" name="rtags[]" value="News"><label for="rtag_news">News</label><br>
-        <input type="checkbox" id="rtag_patents" name="rtags[]" value="Patents"><label for="rtag_patents">Patents</label><br>
-        <input type="checkbox" id="rtag_drugs" name="rtags[]" value="Drugs"><label for="rtag_drugs">Drugs</label><br>
-        <input type="checkbox" id="rtag_" name="rtags[]" value=""><label for="rtag_"></label><br>
-        <input type="checkbox" id="rtag_" name="rtags[]" value=""><label for="rtag_"></label><br>
-        <input type="checkbox" id="rtag_" name="rtags[]" value=""><label for="rtag_"></label><br>
-        <input type="checkbox" id="rtag_" name="rtags[]" value=""><label for="rtag_"></label><br>
-        <input type="checkbox" id="rtag_" name="rtags[]" value=""><label for="rtag_"></label><br>
-        <input type="checkbox" id="rtag_" name="rtags[]" value=""><label for="rtag_"></label><br>
-        <input type="checkbox" id="rtag_" name="rtags[]" value=""><label for="rtag_"></label><br>
-        <input type="checkbox" id="rtag_" name="rtags[]" value=""><label for="rtag_"></label><br>
-        <input type="checkbox" id="rtag_" name="rtags[]" value=""><label for="rtag_"></label><br>
-        </div>
-        <textarea name="notes" rows="5" cols="20" placeholder="Notes"></textarea><br>
-        <input style="width:55px;" type="submit" name="submit" value="Add">
+        <?php
+        $sql_tag_table = 
+        "SELECT *
+        FROM rtags t";
+        $result_tag_table = $connection->query($sql_tag_table);
+            
+        $result_biggest_tag_id = $connection->query(
+        "SELECT rtag_id
+        FROM rtags
+        ORDER BY rtag_id DESC
+        LIMIT 1");
+
+        $row = $result_biggest_tag_id->fetch_assoc();
+        $half_biggest_id = round($row['rtag_id'] / 2);
+            
+        while ($tag_row_array = mysqli_fetch_assoc($result_tag_table)) {
+            foreach ($tag_row_array as $key=>$value) {
+                if (is_numeric($value)) {
+                    $id = $value;
+                } elseif (!is_numeric($value)) {
+                    if ($id <= $half_biggest_id) {     //MAXIMUM NUMBER OF FIELDS IN LEFT COLUMN
+                        echo 
+                        "<input type=\"checkbox\" id=\"rtag_$value\" 
+                        name=\"rtags[]\" value=\"$id\">
+                        <label for=\"rtag_$value\">$value</label><br>";
+                    } else {
+                        //CHECKBOXES RIGHT COLUMN
+                        echo "</div><div class=\"right_column\">";
+                        while ($tag_row_array_right = mysqli_fetch_assoc($result_tag_table)) {
+                            foreach ($tag_row_array_right as $key=>$value) {
+                                if (is_numeric($value)) {
+                                    $id = $value;
+                                } elseif (!is_numeric($value) && $id > 5) {
+                                    echo
+                                    "<input type=\"checkbox\" id=\"rtag_$value\" 
+                                    name=\"rtags[]\" value=\"$id\">
+                                    <label for=\"rtag_$value\">$value</label><br>";
+                                }
+                            }
+                        }
+                        echo "</div>";  //END RIGHT COLUMN
+                    }
+                }
+            }
+        }
+?>
+        <textarea name="notes" rows="5" cols="40" placeholder="Notes" style="clear:left; margin-top:5px;"></textarea><br>
+        <input style="width:55px;" type="submit" name="submit" value="Add">        
     </form>
 
-<?php $filter_tag1 = "Health"; $filter_tag2 = "Science";
-    include 'mysqlconnect.php';
-    if (isset($_POST['submit'])) {include 'submit_research_link.php';}
-?>
+<?php if (isset($_POST['submit'])) {include 'submit_research_link.php';} ?>
+    
 </section>
     
 <section class="top-line">
