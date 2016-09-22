@@ -7,99 +7,152 @@
     <?php include 'styles.php';?>
 </head>  
 <body>
+<?php
+//DELETE BOOKMARK
+if (isset($_POST['delete_rbm_id'])) {
+    $delete_rbm_id = $_POST['delete_rbm_id'];
+    
+    $sql_delete_map_id =
+    "DELETE FROM rbm_rtag_map
+    WHERE rbm_map_id = $delete_rbm_id";    
+    
+    $sql_delete_rbm_id =
+    "DELETE FROM rbookmarks
+    WHERE rbm_id = $delete_rbm_id";
+         
+    if ($connection->query($sql_delete_map_id) === TRUE) {
+        if ($connection->query($sql_delete_rbm_id) === TRUE) {
+            $deleted_bookmark = "Deleted a bookmark.";
+        } else {
+            $deleted_bookmark = "Bookmark not deleted...";
+        }
+    } else {
+        $deleted_bookmark = "Entire bookmark + map not deleted.";
+    }   
+}
+?>
     
 <div id="all_wrap">    
 
 <header>
-    <div style="text-align:center; font-size:1.5em; color:#3399ff; font-weight:bold;">Alex Toneka's</div>
-    <div style="text-align:center; font-size:2.5em; color:#b3b3ff;">Research URLs</div>
+    <div style="text-align:center; font-family:AlexBrush; font-size:3.5em; color:#3399ff; font-weight:bold;">Alex Toneka's</div>
+    <div style="text-align:center; font-size:1.5em; font-weight:bold; color:#4d4e53;">-Research URLs-</div>
     <a href="http://localhost/phpmyadmin/" target="_blank" style="float:right;">phpMyAdmin</a>
 </header>
     
 <!--navigation---------------------------------------------------------------------->
 <nav style="clear:right;">    
-    <ul>
-        <li><a href="index.php">Frequently Used</a></li>
-        <li><a href="freelance.php">About Freelance</a></li>
-        <li><a href="research.php" class="active">Do Research</a></li>
+    <ul id="navbar">
+        <li class="navbutton"><a class="navlink" href="index.php">Frequently Used</a></li>
+        <li class="navbutton"><a class="navlink" href="freelance.php">About Freelance</a></li>
+        <li class="navbutton"><a class="navlink active" href="research.php" class="active">Do Research</a></li>
     </ul>
 </nav> 
 
-<div id="main_wrap">
-    
-<section id="add_link_form">    
-    <form action="research.php" method="post">
-        <br>ADD LINK<br>
-        <input class="titleurl" type="text" name="name" placeholder="Title"autofocus>
-        <input class="titleurl" type="text" name="url" placeholder="URL">
+<section id="side-panel">    
+    <div id="add-link-form">    
+        <form action="research.php" method="post">
+            <br>ADD LINK<br>
+            <input class="titleurl" type="text" name="name" placeholder=" Title"autofocus>
+            <input class="titleurl" type="text" name="url" placeholder= " URL">
+            <br>ADD TAG<br>
+            <input class="titleurl" type="text" name="newtag" placeholder=" New tag">        
+        <!--CHECKBOX COLUMNS----------------------------------------------------------->
+            <div class="left_column">
+            <?php
+            $sql_tag_table = 
+            "SELECT *
+            FROM rtags t";
+            $result_tag_table = $connection->query($sql_tag_table);
+            $rows_divided_by_2 = ($result_tag_table->num_rows) / 2 + 1;    
 
-        
-<!--CHECKBOXES LEFT COLUMN----------------------------------------------------------->
-        <div class="left_column">
-        <?php
-        $sql_tag_table = 
-        "SELECT *
-        FROM rtags t";
-        $result_tag_table = $connection->query($sql_tag_table);
-            
-        $result_biggest_tag_id = $connection->query(
-        "SELECT rtag_id
-        FROM rtags
-        ORDER BY rtag_id DESC
-        LIMIT 1");
+            while ($tag_row_array = mysqli_fetch_assoc($result_tag_table)) {
+                foreach ($tag_row_array as $key=>$value) {
+                    if (is_numeric($value)) {
+                        $id = $value;
+                    } elseif (!is_numeric($value)) {
+                        if ($id <= $rows_divided_by_2) {
 
-        $row = $result_biggest_tag_id->fetch_assoc();
-        $half_biggest_id = round($row['rtag_id'] / 2);
-            
-        while ($tag_row_array = mysqli_fetch_assoc($result_tag_table)) {
-            foreach ($tag_row_array as $key=>$value) {
-                if (is_numeric($value)) {
-                    $id = $value;
-                } elseif (!is_numeric($value)) {
-                    if ($id <= $half_biggest_id) {     //MAXIMUM NUMBER OF FIELDS IN LEFT COLUMN
-                        echo 
-                        "<input type=\"checkbox\" id=\"rtag_$value\" 
-                        name=\"rtags[]\" value=\"$id\">
-                        <label for=\"rtag_$value\">$value</label><br>";
-                    } else {
-                        //CHECKBOXES RIGHT COLUMN
-                        echo "</div><div class=\"right_column\">";
-                        while ($tag_row_array_right = mysqli_fetch_assoc($result_tag_table)) {
-                            foreach ($tag_row_array_right as $key=>$value) {
-                                if (is_numeric($value)) {
-                                    $id = $value;
-                                } elseif (!is_numeric($value) && $id > 5) {
-                                    echo
-                                    "<input type=\"checkbox\" id=\"rtag_$value\" 
-                                    name=\"rtags[]\" value=\"$id\">
-                                    <label for=\"rtag_$value\">$value</label><br>";
+                            //BEGIN LEFT COLUMN
+                            echo 
+                            "<input type=\"checkbox\" class=\"taglist\" id=\"rtag_$value\" 
+                            name=\"rtags[]\" value=\"$id\">
+                            <label for=\"rtag_$value\">$value</label><br>";
+                        } else {
+
+                            //BEGIN RIGHT COLUMN
+                            echo "</div><div class=\"right_column\">";
+                            while ($tag_row_array_right = mysqli_fetch_assoc($result_tag_table)) {
+                                foreach ($tag_row_array_right as $key=>$value) {
+                                    if (is_numeric($value)) {
+                                        $id = $value;
+                                    } elseif (!is_numeric($value)) {
+                                        echo
+                                        "<input type=\"checkbox\" class=\"taglist\" id=\"rtag_$value\" 
+                                        name=\"rtags[]\" value=\"$id\">
+                                        <label for=\"rtag_$value\">$value</label><br>";
+                                    }
                                 }
                             }
+                            echo "</div>";  //END RIGHT COLUMN
                         }
-                        echo "</div>";  //END RIGHT COLUMN
                     }
                 }
             }
-        }
-?>
-        <textarea name="notes" rows="5" cols="40" placeholder="Notes" style="clear:left; margin-top:5px;"></textarea><br>
-        <input style="width:55px;" type="submit" name="submit" value="Add">        
-    </form>
+            ?>
+            <textarea name="notes" rows="5" cols="40" placeholder=" Notes" style="clear:left; margin-top:5px;"></textarea><br>
+            <input style="width:55px;" type="submit" name="submit" value="Add">        
+        </form>
+    </div>
 
-<?php if (isset($_POST['submit'])) {include 'submit_research_link.php';} ?>
-    
+    <div id="filter-by-tag">
+    <!--FILTER BY TAG ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||-->
+        <form id="filter-tags" method="post" action="research.php">
+            <ul>
+                <?php
+                $sql_tag_table = 
+                "SELECT *
+                FROM rtags t";
+                $result_tag_table = $connection->query($sql_tag_table);
+
+                while ($tag_row_array = mysqli_fetch_assoc($result_tag_table)) {
+                    foreach ($tag_row_array as $key=>$value) {
+                        if (is_numeric($value)) {
+                            $id = $value;
+                        } elseif (!is_numeric($value)) {
+                            echo
+                            "<li class=\"filter-tags\">
+                            <input type=\"checkbox\" class=\"filter-tag-checkbox\" id=\"filter_$value\" 
+                            name=\"filter-tags[]\" value=\"$id\">";
+                            echo
+                            "<label class=\"filter-tag-label\" for=\"filter_$value\">$value</label></li>";
+                        }
+                    }
+                }?>
+            </ul>
+            <input type="submit" name="filter-submit" value="Filter">
+        </form>
+        
+    </div>
 </section>
     
-<section class="top-line">
-    <div class="top-line-content">
-    Select tags: Health > Science > Business > Medicine > Data > Analytics > Statistics > E-Commerce > Database > Tools > Legal > Government > News > Patents > Drugs
+<?php if (isset($_POST['submit'])) {include 'submit_research_link.php';} ?>
+       
+<section id="top-line">
+    <div id="top-line-content">
+        <?php if (!empty($_POST['filter-tags'])) {
+            $filterTags = $_POST['filter-tags'];
+            foreach($filterTags as $filterTag) {
+                echo $filterTag;
+            }
+        }?>
     </div>
 </section>
 
-<!--results table---------------------------------------------------------------------->
+<!--RESULTS TABLE |||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||-->
 <section id="results_table">
 <?php $sql_linking_tables = 
-"SELECT b.*, t.*
+"SELECT b.*, t.*, bt.*
 FROM rbm_rtag_map bt, rbookmarks b, rtags t
 WHERE bt.rbm_map_id = b.rbm_id
 AND bt.rtag_map_id = t.rtag_id
@@ -113,16 +166,21 @@ WHERE bt.rtag_map_id = t.rtag_id
 AND bt.rbm_map_id = b.rbm_id";
 $result_tags = $connection->query($sql_tags);
 
-if ($result_linking_tables->num_rows > 0) {?>
-    <table id="link_output">
+if ($result_linking_tables->num_rows > 0) {
+    if (isset($deleted_bookmark)) {
+        echo $deleted_bookmark . "<br>";
+    }
+    echo "<table id=\"link_output\">";?>
+        <thead>
         <tr>
-            <th class="title">Title</th>
+            <th class="title" aria-sort="descending">Title</th>
             <th class="tags">Tags</th>
             <th class="notes">Notes</th>
-            <th class="delete">Delete</th>
-        </tr><?php
-    
-    
+            <th class="delete">X</th>
+        </tr>
+        </thead>
+        
+        <?php echo "<tbody>";   
         //BEGIN TO POPULATE THE ROWS
         while($row = mysqli_fetch_assoc($result_linking_tables)) {
             //DECLARE TITLE FOR TITLE CELL
@@ -143,8 +201,7 @@ if ($result_linking_tables->num_rows > 0) {?>
             "</a></td>";
             
             //DISPLAY THE TAGS
-            echo "<td style=\"text-align:center;\">";                      
-            
+            echo "<td class=\"alight-left\">";                                  
             $rbm_id = $row['rbm_id'];
             
             $sql_tag_map =
@@ -156,28 +213,29 @@ if ($result_linking_tables->num_rows > 0) {?>
             $result_tag_map = $connection->query($sql_tag_map);
             
             while ($tagrow = mysqli_fetch_assoc($result_tag_map)) {
-                echo $tagrow['rtag_name'] . "--";
+                //echo $tagrow['rtag_name'] . " • ";
+                echo "<span class=\"tagDisplay\">$tagrow[rtag_name]</span>";
             }
             
             //DISPLAY NOTES
             echo "<td>" . $row["rbm_notes"] . "</td>";
-            echo "<td>delete</td></tr>";
+            
+            //DELETE BUTTON
+            $delete_rbm_id = $row['rbm_id'];
+            echo "<td>
+            <form method=\"post\" action=\"research.php\">
+                <input type=\"hidden\" name=\"delete_rbm_id\" value=\"$delete_rbm_id\">
+                <input type=\"submit\" class=\"delete-x\" value=\"X\">
+            </form>
+            </td></tr>";
         }
-        echo "</table>";
+        echo "</tbody></table>";
 } else {
     echo "0 results";
 }
 $connection->close();
 ?>
-</section>
-    
+</section>    
 </div>
-    
-<form id="filter_tags" method="get">
-    <input type="checkbox">
-</form>
-    
-</div>
-
 </body>
 </html>
