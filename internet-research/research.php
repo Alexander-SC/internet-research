@@ -7,21 +7,22 @@
     <?php include 'styles.php';?>
 </head>  
 <body>
+ 
+<!--DELETE BOOKMARK-->
 <?php
-//DELETE BOOKMARK
-if (isset($_POST['delete_rbm_id'])) {
-    $delete_rbm_id = $_POST['delete_rbm_id'];
+if (isset($_POST['delete_bmID'])) {
+    $delete_bmID = $_POST['delete_bmID'];
     
-    $sql_delete_map_id =
-    "DELETE FROM rbm_rtag_map
-    WHERE rbm_map_id = $delete_rbm_id";    
+    $sql_delete_mapID =
+    "DELETE FROM r_map
+    WHERE bmMapID = $delete_bmID";    
     
-    $sql_delete_rbm_id =
-    "DELETE FROM rbookmarks
-    WHERE rbm_id = $delete_rbm_id";
+    $sql_delete_bmID =
+    "DELETE FROM r_bookmarks
+    WHERE bmID = $delete_bmID";
          
-    if ($connection->query($sql_delete_map_id) === TRUE) {
-        if ($connection->query($sql_delete_rbm_id) === TRUE) {
+    if ($connection->query($sql_delete_mapID) === TRUE) {
+        if ($connection->query($sql_delete_bmID) === TRUE) {
             $deleted_bookmark = "Deleted a bookmark.";
         } else {
             $deleted_bookmark = "Bookmark not deleted...";
@@ -32,52 +33,54 @@ if (isset($_POST['delete_rbm_id'])) {
 }
 ?>
     
-<div id="all_wrap">    
 
 <header>
-    <div style="text-align:center; font-family:AlexBrush; font-size:3.5em; color:#3399ff; font-weight:bold;">Alex Toneka's</div>
-    <div style="text-align:center; font-size:1.5em; font-weight:bold; color:#4d4e53;">-Research URLs-</div>
-    <a href="http://localhost/phpmyadmin/" target="_blank" style="float:right;">phpMyAdmin</a>
+    <div id="logo">
+        Alex Toneka's
+    </div>
 </header>
+
     
-<!--navigation---------------------------------------------------------------------->
-<nav style="clear:right;">    
+<nav>    
     <ul id="navbar">
-        <li class="navbutton"><a class="navlink" href="index.php">Frequently Used</a></li>
+        <li class="navbutton"><a class="navlink" href="index.php">Home</a></li>
         <li class="navbutton"><a class="navlink" href="freelance.php">About Freelance</a></li>
         <li class="navbutton"><a class="navlink active" href="research.php" class="active">Do Research</a></li>
+        <li class="currentpage">Research URLs</li>
     </ul>
 </nav> 
 
+<div id="page-wrap">    
 <section id="side-panel">    
     <div id="add-link-form">    
-        <form action="research.php" method="post">
-            <br>ADD LINK<br>
-            <input class="titleurl" type="text" name="name" placeholder=" Title"autofocus>
-            <input class="titleurl" type="text" name="url" placeholder= " URL">
-            <br>ADD TAG<br>
-            <input class="titleurl" type="text" name="newtag" placeholder=" New tag">        
+        <form action="research.php" method="post" autocomplete="off">
+            <br>New bookmark<br>
+            <input class="add-link-input" type="text" name="name" placeholder=" Title"autofocus>
+            <input class="add-link-input highlight" type="text" name="url" placeholder= " URL">
+            <input class="add-link-input" type="text" name="shortdesc" placeholder= " Short description/tagline">
+            <br>New tag:
+            <input class="short add-link-input" type="text" name="newtag" placeholder=" New tag"><br />
         <!--CHECKBOX COLUMNS----------------------------------------------------------->
             <div class="left_column">
             <?php
             $sql_tag_table = 
             "SELECT *
-            FROM rtags t";
+            FROM r_tags t";
             $result_tag_table = $connection->query($sql_tag_table);
-            $rows_divided_by_2 = ($result_tag_table->num_rows) / 2 + 1;    
+            $divider = ceil($result_tag_table->num_rows + 2) / 2;       
 
             while ($tag_row_array = mysqli_fetch_assoc($result_tag_table)) {
                 foreach ($tag_row_array as $key=>$value) {
                     if (is_numeric($value)) {
                         $id = $value;
                     } elseif (!is_numeric($value)) {
-                        if ($id <= $rows_divided_by_2) {
+                        if ($id <= $divider) {
 
                             //BEGIN LEFT COLUMN
                             echo 
                             "<input type=\"checkbox\" class=\"taglist\" id=\"rtag_$value\" 
                             name=\"rtags[]\" value=\"$id\">
-                            <label for=\"rtag_$value\">$value</label><br>";
+                            <label class=\"taglabel\" for=\"rtag_$value\">$value</label><br>";
                         } else {
 
                             //BEGIN RIGHT COLUMN
@@ -90,7 +93,7 @@ if (isset($_POST['delete_rbm_id'])) {
                                         echo
                                         "<input type=\"checkbox\" class=\"taglist\" id=\"rtag_$value\" 
                                         name=\"rtags[]\" value=\"$id\">
-                                        <label for=\"rtag_$value\">$value</label><br>";
+                                        <label class=\"taglabel\" for=\"rtag_$value\">$value</label><br>";
                                     }
                                 }
                             }
@@ -100,19 +103,19 @@ if (isset($_POST['delete_rbm_id'])) {
                 }
             }
             ?>
-            <textarea name="notes" rows="5" cols="40" placeholder=" Notes" style="clear:left; margin-top:5px;"></textarea><br>
-            <input style="width:55px;" type="submit" name="submit" value="Add">        
+            <textarea name="notes" class="add-link-input" placeholder=" Notes" style="clear:left; margin-top:5px;"></textarea><br>
+            <input style="width:55px; float:right;" type="submit" name="submit" value="Add">        
         </form>
     </div>
 
     <div id="filter-by-tag">
     <!--FILTER BY TAG ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||-->
-        <form id="filter-tags" method="post" action="research.php">
+        <form id="filter-tags" method="get" action="research.php">
             <ul>
                 <?php
                 $sql_tag_table = 
                 "SELECT *
-                FROM rtags t";
+                FROM r_tags t";
                 $result_tag_table = $connection->query($sql_tag_table);
 
                 while ($tag_row_array = mysqli_fetch_assoc($result_tag_table)) {
@@ -123,7 +126,7 @@ if (isset($_POST['delete_rbm_id'])) {
                             echo
                             "<li class=\"filter-tags\">
                             <input type=\"checkbox\" class=\"filter-tag-checkbox\" id=\"filter_$value\" 
-                            name=\"filter-tags[]\" value=\"$id\">";
+                            name=\"filterBy\" value=\"$id\">";
                             echo
                             "<label class=\"filter-tag-label\" for=\"filter_$value\">$value</label></li>";
                         }
@@ -146,24 +149,39 @@ if (isset($_POST['delete_rbm_id'])) {
                 echo $filterTag;
             }
         }?>
+        
     </div>
 </section>
 
 <!--RESULTS TABLE |||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||-->
 <section id="results_table">
-<?php $sql_linking_tables = 
-"SELECT b.*, t.*, bt.*
-FROM rbm_rtag_map bt, rbookmarks b, rtags t
-WHERE bt.rbm_map_id = b.rbm_id
-AND bt.rtag_map_id = t.rtag_id
-GROUP BY b.rbm_id";
+    
+<?php 
+if (isset($_GET['filterBy'])) {
+    $filterBy = $_GET['filterBy'];
+    
+    $sql_linking_tables = 
+    "SELECT b.*, t.*, bt.*
+    FROM r_map bt, r_bookmarks b, r_tags t
+    WHERE bt.bmMapID = b.bmID
+    AND bt.tagMapID = $filterBy
+    GROUP BY b.bmID";
+} else {
+    
+    $sql_linking_tables = 
+    "SELECT b.*, t.*, bt.*
+    FROM r_map bt, r_bookmarks b, r_tags t
+    WHERE bt.bmMapID = b.bmID
+    AND bt.tagMapID = t.tagID
+    GROUP BY b.bmID";
+}
 $result_linking_tables = $connection->query($sql_linking_tables);
 
 $sql_tags = 
-"SELECT b.rbm_id, t.rtag_name
-FROM rbm_rtag_map bt, rbookmarks b, rtags t
-WHERE bt.rtag_map_id = t.rtag_id
-AND bt.rbm_map_id = b.rbm_id";
+"SELECT b.bmID, t.tagName
+FROM r_map bt, r_bookmarks b, r_tags t
+WHERE bt.tagMapID = t.tagID
+AND bt.bmMapID = b.bmID";
 $result_tags = $connection->query($sql_tags);
 
 if ($result_linking_tables->num_rows > 0) {
@@ -173,10 +191,11 @@ if ($result_linking_tables->num_rows > 0) {
     echo "<table id=\"link_output\">";?>
         <thead>
         <tr>
-            <th class="title" aria-sort="descending">Title</th>
+            <th class="title">Title</th>
+            <th class="shortdesc">Summary</th>
             <th class="tags">Tags</th>
             <th class="notes">Notes</th>
-            <th class="delete">X</th>
+            <th class="delete">x</th>
         </tr>
         </thead>
         
@@ -184,47 +203,49 @@ if ($result_linking_tables->num_rows > 0) {
         //BEGIN TO POPULATE THE ROWS
         while($row = mysqli_fetch_assoc($result_linking_tables)) {
             //DECLARE TITLE FOR TITLE CELL
-            if (!empty($row["rbm_title"])) {
-                $rowname = $row["rbm_title"];
-            } elseif (empty($row["rbm_title"]) && !empty($row["rbm_url"])) {
-                $rowname = $row["rbm_url"];
+            if (!empty($row["bmTitle"])) {
+                $rowname = $row["bmTitle"];
+            } elseif (empty($row["bmTitle"]) && !empty($row["bmURL"])) {
+                $rowname = $row["bmURL"];
             } else {
                 $rowname = "null";
             }
             
             //DISPLAY TITLE
-            echo "<tr><td><a href=\"" . $row["rbm_url"] . 
+            echo "<tr><td><a href=\"" . $row["bmURL"] . 
             "\" class=\"bookmark\" target=\"_blank\">
             <img src=\"http://www.google.com/s2/favicons?domain=" . 
-            $row['rbm_url'] . "\" height=\"16\" width=\"16\"> " . 
-            $rowname . 
-            "</a></td>";
+            $row['bmURL'] . "\" height=\"16\" width=\"16\"> " . 
+            $rowname . "</a></td>";
+            
+            //DISPLAY SHORT DESCRIPTION
+            echo "<td>" . $row["bmShortDesc"] . "</td>";
             
             //DISPLAY THE TAGS
             echo "<td class=\"alight-left\">";                                  
-            $rbm_id = $row['rbm_id'];
+            $bmID = $row['bmID'];
             
             $sql_tag_map =
-            "SELECT bt.rmap_id, b.rbm_id, t.rtag_name 
-            FROM rbm_rtag_map bt, rbookmarks b, rtags t
-            WHERE bt.rtag_map_id = t.rtag_id
-            AND bt.rbm_map_id = b.rbm_id
-            AND b.rbm_id = $rbm_id";
+            "SELECT bt.mapID, b.bmID, t.tagName 
+            FROM r_map bt, r_bookmarks b, r_tags t
+            WHERE bt.tagMapID = t.tagID
+            AND bt.bmMapID = b.bmID
+            AND b.bmID = $bmID";
             $result_tag_map = $connection->query($sql_tag_map);
             
             while ($tagrow = mysqli_fetch_assoc($result_tag_map)) {
-                //echo $tagrow['rtag_name'] . " • ";
-                echo "<span class=\"tagDisplay\">$tagrow[rtag_name]</span>";
+                echo "<span class=\"tagDisplay\">$tagrow[tagName]</span>";
+                //http_build_query()
             }
             
             //DISPLAY NOTES
-            echo "<td>" . $row["rbm_notes"] . "</td>";
+            echo "<td>" . $row["bmNotes"] . "</td>";
             
             //DELETE BUTTON
-            $delete_rbm_id = $row['rbm_id'];
+            $delete_bmID = $row['bmID'];
             echo "<td>
             <form method=\"post\" action=\"research.php\">
-                <input type=\"hidden\" name=\"delete_rbm_id\" value=\"$delete_rbm_id\">
+                <input type=\"hidden\" name=\"delete_bmID\" value=\"$delete_bmID\">
                 <input type=\"submit\" class=\"delete-x\" value=\"X\">
             </form>
             </td></tr>";

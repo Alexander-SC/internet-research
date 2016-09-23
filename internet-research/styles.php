@@ -5,34 +5,57 @@
     }
     
     body {
-        background-color: #eaeff2;
-        font-family: Candara, Arial, sans-serif;
+        background-color: #3399FF;
+        font-family:"Open Sans Light", Candara, Arial, sans-serif;
+        margin:0;
+        padding:0;
         /* Open Sans Light */
     }
     
-    div#all_wrap {
-        background-color:#f5f5f5;
-        width:95%;
-        margin-left:auto;
-        margin-right:auto;
-        margin-top:30px;
-        padding:15px;
-        border:3px solid #d1d1e0;
-        overflow:auto;
+    header {
+        background-color:#F7FBFF;
+        margin:20px auto;
+        width:94%;
+        height:90px;
+    }
+    
+    div#logo {
+        padding:9px 0 0 0;
+        text-align:center;
+        font-family:AlexBrush;
+        font-size:2.5em;
+        color:#4d4e53;
+        font-weight:bold;
     }
     
 /*NAVIGATION*/    
+    nav {
+        width:100%;
+        position:absolute;
+        top:88px;
+        left:0;
+        background-color:#4d4e53;
+        padding:3px 0px 3px 0px;
+    }
+    
     ul#navbar {
         list-style-type: none;
-        margin: 0;
-        padding: 0;
-        overflow: hidden;
-        background-color: #b3b3ff;
+        margin:0;
+        padding:0 3% 0 3%;
+        overflow:hidden;
     }
 
     li.navbutton {
         float: left;
         border-right: 5px solid #4d4e53;
+    }
+    
+    li.currentpage {
+        text-align:center;
+        font-size:1.25em;
+        color:#F7FBFF;
+        float:right;
+        padding:7px 0 0 0;
     }
         
     li:last-child.navbutton {
@@ -42,10 +65,10 @@
         display: block;
         color: #3399ff;
         text-align: center;
-        padding-top: 15px;
-        padding-bottom: 5px;
+        padding-top: 12px;
+        padding-bottom: 3px;
         padding-right: 5px;
-        padding-left: 20px;
+        padding-left: 25px;
         background-color: #e6f2ff;
         text-decoration: none;
         font-size:1.1em;
@@ -58,17 +81,36 @@
         color: white;
     }
     
+    li a:hover {
+        background-color:#3399FF;
+        color:#FFFFFF;
+    }
+    
+    div#page-wrap {
+        background-color:#F7FBFF;
+        width:94%;
+        margin-left:auto;
+        margin-right:auto;
+        margin-top:10px;
+        padding:0px;
+        border:0px solid #d1d1e0;
+        overflow:auto;
+    }
+    
     section#side-panel {
         float:left;
         min-height:395px;
+        min-width:330px;
+        padding:10px;
+        background-color:#4d4e53;
+        border:0px solid #4d4e53;
+        color:white; 
     }
         
     div#add-link-form {
         width:320px;
-        background-color:#b3b3ff;
-        border:2px solid #4d4e53;
         padding:5px;
-        margin-top:7px;
+        overflow:auto;
     }
     
     div#filter-by-tag {
@@ -81,12 +123,20 @@
         margin-top:0px;
     }
     
-    input.titleurl {
-        border:2px solid #4d4e53;
+    .add-link-input {
+        background-color:#F7FBFF;
+        border:1px solid #4d4e53;
         width:316px;
         height:20px;
         margin-bottom:7px;
-        
+    }
+    
+    input.short {
+        width:200px;
+    }
+    
+    input.highlight {
+        background-color:#E6F2FF;
     }
     
     .left_column {
@@ -103,14 +153,18 @@
     input[type="checkbox"].taglist {
         display: none;
     }
-    label {
+    
+    label.taglabel {
         cursor: pointer;
+        font-size:0.8em;
+        color:#ABA5B5;
     }
+    
     input[type="checkbox"].taglist + label:before {
-        border: 1px solid #7f83a2;
+        border: 1px solid #ABA5B5;
         content: "\00a0";
         display: inline-block;
-        font: 16px/1em sans-serif;
+        font: 1em sans-serif;
         height: 16px;
         margin: 0 .25em 0 0;
         padding: 0;
@@ -118,8 +172,8 @@
         width: 16px;
     }
     input[type="checkbox"]:checked.taglist + label:before {
-        background: #3d404e;
-        color: #666;
+        background: #4d4e53;
+        color:#FAA850;
         content: "\2713";
         text-align: center;
     }
@@ -142,7 +196,7 @@
     li.filter-tags {
         display:block;
         float:left;
-        margin-right:10px;
+        margin-right:30px;
     }
     
     input.filter-tag-checkbox {
@@ -158,6 +212,7 @@
 /*LINK OUTPUT TABLE*/
     section#results_table {
         overflow:hidden;
+        margin:0 auto 0 auto;
     }
     
     table#link_output {
@@ -166,10 +221,11 @@
         border-bottom:3px solid #5c00e6;
         border-left:1px solid #5c00e6;
         border-right:1px solid #5c00e6;
-        width:99%;
-        margin-left:auto;
-        margin-top:7px;
-
+        width:100%;
+    }
+    
+    table#link_output td {
+        font-size:0.92em;
     }
     
     table#link_output tr, th, td {
@@ -177,23 +233,29 @@
         white-space:nowrap;
         text-overflow:ellipsis;
         border-right:1px solid #5c00e6;
-        padding-left:5px;
-        padding-right:5px; 
-        padding-top:3px;
-        padding-bottom:2px;
+        padding:3px 0px 3px 5px;
     }
 
     table#link_output th {
         background-color:#5c00e6;
         color:#ffffff;
+        transition:0.5s;
     }
     
     table#link_output th.title {
-        width:175px;
+        width:250px;
+    }
+    
+    table#link_output th.shortdesc {
+        width:275px;
     }
     
     table#link_output th.tags {
-        width:225px;
+        width:150px;
+    }
+    
+    table#link_output th.tags:hover {
+        width:300px;
     }
     
     td.align-left {
@@ -201,7 +263,7 @@
     }
     
     table#link_output th.notes {
-        width:350px;
+        width:225px;
     }
     
     span.tagDisplay {
@@ -219,12 +281,15 @@
     }
     
     table#link_output th.delete {
-        width:8px;
+        width:20px;
+        padding:0px;
+        text-align:center;
     }
    
     input[type="submit"].delete-x {
         padding:0px;
         margin:0px;
+        font-size:12px;
         border:2px solid #FAA850;
         background-color:#FFD3A3;
         height:16px;
@@ -232,11 +297,11 @@
         cursor:pointer;
     }
     table#link_output tr:nth-child(even) {
-        background-color:#e6f2ff;
+        background-color:#E6F2FF;
     }
     
     table#link_output tr:nth-child(odd) {
-        background-color:#b3d7ff;
+        background-color:#CCE4FF;
     }
     
     table#link_output tr:hover {
@@ -245,6 +310,7 @@
     
     table#link_output td:hover {
         white-space:normal;
+        text-overflow:clip;
     }
     
     a.bookmark {
@@ -255,6 +321,7 @@
     }
     
     a.bookmark:hover {
+        transition-duration:0.25s;
         font-weight:bold;
         padding-left:5px;
     }
