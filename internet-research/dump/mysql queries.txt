@@ -1,0 +1,28 @@
+//"Toxi" solution http://tagging.pui.ch/post/37027745720/tags-database-schemas
+SELECT rbookmarks.*
+FROM rbm_rtag_map bt, rbookmarks b, rtags t
+WHERE bt.rtag_map_id = t.rtag_id
+AND (t.rtag_name IN ('Health'))
+AND b.rbm_id = bt.rbm_map_id
+GROUP BY b.rbm_id
+HAVING COUNT( b.rbm_id )=3
+
+//Second version, simplified
+SELECT *
+FROM rbm_rtag_map bt, rbookmarks b, rtags t
+WHERE t.rtag_name = "Health"
+AND b.rbm_id = bt.rbm_map_id
+
+//Website version
+SELECT b.*, t.*
+FROM rbm_rtag_map bt, rbookmarks b, rtags t
+WHERE bt.rtag_map_id = t.rtag_id
+AND b.rbm_id = bt.rbm_map_id
+GROUP BY b.rbm_id
+
+
+//SELECT IF
+SELECT b.*, t.* IF (1=1,'true','false')
+FROM rbm_rtag_map bt, rbookmarks b, rtags t
+WHERE b.rbm_id = bt.rbm_map_id AND
+bt.rtag_map_id = t.rtag_id

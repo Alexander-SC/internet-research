@@ -1,0 +1,21 @@
+tag navigation on left side, on mouse hover, the link will stick out to the right of the rest of the column. multi-colors
+
+random 3 links from all bookmarks to display on each new page refresh
+
+search sites using Google "site:URL 'params'" multiple bookmarks at a time, sorted by tags.
+
+-To do list with color items that slowly fade over time, to give a visual idea of longevity of an item
+
+-Search a search term by choosing bookmark tags and the search will only be applied to links with the tags selected
+
+-when searching by tag, also (in a separate <div> show results for bookmarks that contain the tag name within the title as well.
+
+
+TABLE INSPIRATION: http://kogodbusiness.com/reports/auto-index/
+
+
+
+COLLECTIONS: You will be able to create a new tab for a project and list bookmarks relevant to that project.
+
+
+You will be able to click on a tag in the results table, it will select all rows with that tag, color the tag and move the tag to the front of the tags in the cell.

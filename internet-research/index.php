@@ -8,16 +8,13 @@
 <body>
     
     
-<header>
-    <div id="logo">
-        Alex Toneka's
-    </div>
-</header>
+<?php include 'lib/header.php'; ?>
 
     
 <nav>    
     <ul id="navbar">
         <li class="navbutton"><a class="navlink active" href="index.php">Home</a></li>
+        <li class="navbutton"><a class="navlink" href="alex.php">Alex</a></li>
         <li class="navbutton"><a class="navlink" href="freelance.php">About Freelance</a></li>
         <li class="navbutton"><a class="navlink" href="research.php">Do Research</a></li>
         <li class="currentpage">Home page</li>
@@ -35,7 +32,18 @@
        
 <section id="top-line">
     <div id="top-line-content">
-        <img src="images/161091_mieshka_internet-research - Copy.jpg" style="width:70%;">
+        <div id="top-note">
+        <p>Internet research is a service to collect important information crucial to a company or person's decision. Being well informed of the details, possible outcomes, and other aspects of a decision is how you make the leap from guessing to knowing.</p>
+        
+        <p>With the assistance of a huge database of connections to authoritive and reputable websites, it is completely possible to find true and accurate facts on the web that were once only accessible by other means. As I sift and sort through countless reports, studies, articles, and journals, I may stumble on a digitized book with specific information I am seeking. Like a true investigator, the book may be a lead for me to get to the final answer of your question</p>
+        
+        <p>When I am satisfied that I have fully answered your question, a report will be written on my findings to be presented to you. It is completely your's to do with what you like. Please hire me on your next project and let me find what you are looking for.</p>
+        
+        <p>My best,<br />
+            <span style="font-family:AlexBrush; font-size:2.5em;">Alex Toneka</span><br />
+            Alex Toneka</p>
+        </div>
+
     </div>
 </section>
 

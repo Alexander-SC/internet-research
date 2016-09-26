@@ -1,6 +1,6 @@
 <?php session_start(); 
 unset($_SESSION['edit_bmID']);
-$_SESSION['table'] = "f";
+$_SESSION['table'] = "a";
 $pagename = htmlentities($_SERVER['PHP_SELF']);
 include 'lib/mysqlconnect.php';
 ?>
@@ -22,13 +22,13 @@ include 'lib/delete_bookmark.php';
 //PAGE HEADER
 include 'lib/header.php';
 ?>
-    
+  
     
 <nav>  
     <ul id="navbar">
         <li class="navbutton"><a class="navlink" href="index.php">Home</a></li>
-        <li class="navbutton"><a class="navlink" href="alex.php">Alex</a></li>
-        <li class="navbutton"><a class="navlink active" href="freelance.php">About Freelance</a></li>
+        <li class="navbutton"><a class="navlink active" href="alex.php">Alex</a></li>
+        <li class="navbutton"><a class="navlink" href="freelance.php">About Freelance</a></li>
         <li class="navbutton"><a class="navlink" href="research.php">Do Research</a></li>
         <li class="currentpage">Freelance URLs</li>
     </ul>
