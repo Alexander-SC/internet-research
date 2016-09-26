@@ -1,4 +1,0 @@
-tag navigation on left side, on mouse hover, the link will stick out to the right of the rest of the column. multi-colors
-
-random 3 links from all bookmarks to display on each new page refresh
-
