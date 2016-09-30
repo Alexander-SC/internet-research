@@ -94,7 +94,7 @@
     }
         
 /*SECOND NAV BAR*/
-    ul#saved-lists {
+    ul#second-nav {
         list-style-type: none;
         margin:5px 0 0 0;
         padding:0 3% 0 3%;
@@ -105,14 +105,7 @@
         float: left;
         border-right: 5px solid #4d4e53;
     }
-    
-    li.nav-collections {
-        color:#F7FBFF;
-        margin-top:5px;
-        font-size:0.9em;
-        font-weight:bold;
-    }
-    
+
     li.currentpage2 {
         text-align:center;
         font-size:1.25em;

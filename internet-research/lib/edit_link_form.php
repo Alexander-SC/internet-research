@@ -1,13 +1,34 @@
+<?php
+
+//GET AND STORE TITLE, URL, SHORTDESC, NOTES
+$sql_row_to_edit = 
+    "SELECT b.*
+    FROM $table_bm b
+    WHERE b.bmID = '" . $_SESSION['edit_bmID'] . "'";
+$result_row_to_edit = $connection->query($sql_row_to_edit);
+
+while($row = mysqli_fetch_assoc($result_row_to_edit)) {
+    $title = $row['bmTitle'];
+    $url = $row['bmURL'];
+    $shortdesc = $row['bmShortDesc'];
+    $notes =$row['bmNotes'];
+}
+
+?>
+
+
+
+
 <div id="add-link-form">    
     <form action="<?php echo $pagename;?>" method="post" autocomplete="off">
         
         <br>Edit bookmark<br>
-        <input class="add-link-input" type="text" name="name" placeholder=" New title"autofocus>
-        <input class="add-link-input highlight" type="text" name="url" placeholder= " New URL">
-        <input class="add-link-input" type="text" name="shortdesc" placeholder= " New short description/tagline">
+        <input class="add-link-input" type="text" name="name" value="<?php echo $title;?>" autofocus>
+        <input class="add-link-input highlight" type="text" name="url" value="<?php echo $url;?>">
+        <input class="add-link-input" type="text" name="shortdesc" value="<?php echo $shortdesc;?>">
         
         <br>Add new tag:
-        <input class="short add-link-input" type="text" name="newtag" placeholder=" New tag"><br />
+        <input class="short add-link-input" type="text" name="newtag" placeholder="Enter new tag"><br />
 
             
         <div class="left_column">
@@ -62,7 +83,7 @@
             }
         }
         ?>
-        <textarea name="notes" class="add-link-input" placeholder=" Notes" style="clear:left; margin-top:5px;"></textarea><br>
-        <input type="submit" class="link-submit" name="submit" value="">          
+        <input type="text" name="notes" class="add-link-input" style="clear:left; margin-top:5px;" value="<?php echo $notes;?>"><br>
+        <input type="submit" class="edit-submit" name="submit" value="">          
     </form>
 </div>

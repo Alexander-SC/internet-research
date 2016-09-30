@@ -19,3 +19,9 @@ COLLECTIONS: You will be able to create a new tab for a project and list bookmar
 
 
 You will be able to click on a tag in the results table, it will select all rows with that tag, color the tag and move the tag to the front of the tags in the cell.
+
+STICKIES: Allow bookmarks to be sticked to the top.
+
+FILTER PRESETS: Saved filter tags saved under a name, under a main category (such as Alex)
+
+FOLDERS: Allow creation of folders.

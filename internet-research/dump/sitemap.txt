@@ -1,0 +1,19 @@
+Alex Toneka's Homesite
+
+1. Home
+  A. About
+2. Bookmarks
+  A. All bookmarks
+  B. Categories
+    a. New category
+    b. Alex
+    c. Freelancing - IR
+    d. Freelancing - Web Dev
+    e. Internet Research
+    f. Web Dev
+  C. Collections
+    a. New collection
+    b. Job searches
+    c. Antiques at Park Row 
+3. To Do
+4. $I/O (SILO)

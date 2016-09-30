@@ -23,17 +23,26 @@ include 'lib/delete_bookmark.php';
 include 'lib/header.php';
 ?>
 
-
-<nav>    
-    <ul id="navbar">
-        <li class="navbutton"><a class="navlink" href="index.php">Home</a></li>
-        <li class="navbutton"><a class="navlink" href="alex.php">Alex</a></li>
-        <li class="navbutton"><a class="navlink" href="freelance.php">About Freelance</a></li>
-        <li class="navbutton"><a class="navlink active" href="research.php" class="active">Do Research</a></li>
-        <li class="currentpage">Research URLs</li>
-    </ul>
-</nav> 
     
+<nav>  
+    <ul id="main-nav">
+        <li class="navbutton1"><a class="navlink1" href="index.php">Home</a></li>
+        <li class="navbutton1"><a class="navlink1" href="alex.php">Alex</a></li>
+        <li class="navbutton1"><a class="navlink1" href="freelance.php">About Freelance</a></li>
+        <li class="navbutton1"><a class="navlink1 active1" href="research.php">Do Research</a></li>
+        <li class="currentpage1">Research URLs</li>
+    </ul>
+    
+    
+    <ul id="saved-lists">
+        <li class="navbutton2 nav-collections">Collections ► </li>
+        <li class="navbutton2"><a class="navlink2" href="alex.php?filter%5B%5D=2&filter%5B%5D=3&filter-submit=Filter">Project #1</a></li>
+        <li class="navbutton2"><a class="navlink2" href="">Project #2</a></li>
+        <li class="navbutton2"><a class="navlink2" href="alex.php?filter%5B%5D=2&filter%5B%5D=3&filter-submit=Filter">Project #3</a></li>
+        <li class="search-box">Find ► <input type="search" /></li>
+    </ul>
+</nav>  
+        
 
 <div id="page-wrap">    
     <section id="side-panel">  
@@ -48,7 +57,6 @@ include 'lib/header.php';
 
     <section id="top-line">
         <div id="top-line-content">
-            Find ► <input type="search" />
         </div>
     </section>
 
@@ -59,6 +67,8 @@ include 'lib/header.php';
         ?>
     </section>   
 </div>
+    
+<?php include 'lib/footer.php'; ?>
     
 </body>
 </html>

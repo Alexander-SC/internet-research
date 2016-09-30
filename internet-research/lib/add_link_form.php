@@ -2,12 +2,12 @@
     <form action="<?php echo $pagename;?>" method="post" autocomplete="off">
         
         <br>New bookmark<br>
-        <input class="add-link-input" type="text" name="name" placeholder=" Title"autofocus>
-        <input class="add-link-input highlight" type="text" name="url" placeholder= " URL">
-        <input class="add-link-input" type="text" name="shortdesc" placeholder= " Short description/tagline">
+        <input class="add-link-input" type="text" name="name" placeholder="Title"autofocus>
+        <input class="add-link-input" type="text" name="url" placeholder= "URL">
+        <input class="add-link-input" type="text" name="shortdesc" placeholder= "Short description">
         
         <br>Add new tag:
-        <input class="short add-link-input" type="text" name="newtag" placeholder=" New tag"><br />
+        <input class="short add-link-input" type="text" name="newtag" placeholder="New tag"><br />
 
             
         <div class="left_column">

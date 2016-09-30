@@ -15,10 +15,10 @@
                         } elseif (!is_numeric($value)) {
                             echo
                             "<li class=\"filter-tags\">
-                            <input type=\"checkbox\" class=\"filter-tag-checkbox\" id=\"filter_$value\" 
-                            name=\"filterBy\" value=\"$id\">";
+                            <input type=\"checkbox\" class=\"filter-tag-checkbox\" id=\"filter_$id\" 
+                            name=\"filter[]\" value=\"$id\">";
                             echo
-                            "<label class=\"filter-tag-label\" for=\"filter_$value\">$value</label></li>";
+                            "<label class=\"filter-tag-label\" for=\"filter_$id\">$value</label></li>";
                         }
                     }
                 }?>

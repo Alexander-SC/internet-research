@@ -1,12 +1,14 @@
 <?php //RESULTS TABLE//////////
-if (isset($_GET['filterBy'])) { //FILTER RESULTS BY
-    $filterBy = $_GET['filterBy'];
+if (isset($_GET['filter'])) { //FILTER RESULTS BY
+    
+    $filterIDs = implode(',',$_GET['filter']);
     
     $sql_linking_tables = 
     "SELECT b.*, t.*, bt.*
     FROM $table_map bt, $table_bm b, $table_tags t
     WHERE bt.bmMapID = b.bmID
-    AND bt.tagMapID = $filterBy
+    AND bt.tagMapID
+    IN ( $filterIDs )
     GROUP BY b.bmID
     ORDER BY b.bmTitle";
 } elseif (isset($_SESSION['edit_bmID'])) { //EDIT PAGE
