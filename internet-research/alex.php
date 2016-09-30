@@ -25,12 +25,20 @@ include 'lib/header.php';
   
     
 <nav>  
-    <ul id="navbar">
-        <li class="navbutton"><a class="navlink" href="index.php">Home</a></li>
-        <li class="navbutton"><a class="navlink active" href="alex.php">Alex</a></li>
-        <li class="navbutton"><a class="navlink" href="freelance.php">About Freelance</a></li>
-        <li class="navbutton"><a class="navlink" href="research.php">Do Research</a></li>
-        <li class="currentpage">Freelance URLs</li>
+    <ul id="main-nav">
+        <li class="navbutton1"><a class="navlink1" href="index.php">Home</a></li>
+        <li class="navbutton1"><a class="navlink1 active1" href="alex.php">Alex</a></li>
+        <li class="navbutton1"><a class="navlink1" href="freelance.php">About Freelance</a></li>
+        <li class="navbutton1"><a class="navlink1" href="research.php">Do Research</a></li>
+        <li class="currentpage1">Alex URLs</li>
+    </ul>
+    
+    <ul id="saved-lists">
+        <li class="navbutton2 nav-collections">Collections ► </li>
+        <li class="navbutton2"><a class="navlink2" href="alex.php?filter%5B%5D=2&filter%5B%5D=3&filter-submit=Filter">Desteni</a></li>
+        <li class="navbutton2"><a class="navlink2" href="">Web Dev</a></li>
+        <li class="navbutton2"><a class="navlink2" href="alex.php?filter%5B%5D=2&filter%5B%5D=3&filter-submit=Filter">Monies</a></li>
+        <li class="search-box">Find ► <input type="search" /></li>
     </ul>
 </nav> 
     
@@ -48,7 +56,6 @@ include 'lib/header.php';
 
     <section id="top-line">
         <div id="top-line-content">
-            Find ► <input type="search" />
         </div>
     </section>
 
@@ -60,5 +67,7 @@ include 'lib/header.php';
     </section>   
 </div>
     
+<?php include 'lib/footer.php'; ?>    
+
 </body>
 </html>

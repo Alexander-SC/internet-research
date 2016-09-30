@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <title>Alex Toneka's Homesite</title>
+    <title>Alex Toneka's Online Research</title>
     <?php include 'styles.php';?>
 </head>  
 <body>
@@ -14,14 +14,17 @@
 <nav>  
     <ul id="main-nav">
         <li class="navbutton1"><a class="navlink1 active1" href="index.php">Home</a></li>
-        <li class="navbutton1"><a class="navlink1" href="bookmarks.php">Bookmarks</a></li>
-        <li class="navbutton1"><a class="navlink1" href="freelance.php">To Do</a></li>
-        <li class="navbutton1"><a class="navlink1" href="research.php">$I/O</a></li>
+        <li class="navbutton1"><a class="navlink1" href="alex.php">Alex</a></li>
+        <li class="navbutton1"><a class="navlink1" href="freelance.php">About Freelance</a></li>
+        <li class="navbutton1"><a class="navlink1" href="research.php">Do Research</a></li>
         <li class="currentpage1">Home page</li>
     </ul>
     
-    <ul id="second-nav">
-        <li class="navbutton2"><a class="navlink2" href="about.php">About</a></li>
+    <ul id="saved-lists">
+        <li class="navbutton2 nav-collections">Collections ► </li>
+        <li class="navbutton2"><a class="navlink2" href="alex.php?filter%5B%5D=2&filter%5B%5D=3&filter-submit=Filter">1</a></li>
+        <li class="navbutton2"><a class="navlink2" href="">2</a></li>
+        <li class="navbutton2"><a class="navlink2" href="alex.php?filter%5B%5D=2&filter%5B%5D=3&filter-submit=Filter">3</a></li>
         <li class="search-box">Find ► <input type="search" /></li>
     </ul>
 </nav> 

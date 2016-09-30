@@ -1,55 +1,92 @@
-<?php 
-$postname = mysqli_real_escape_string($connection, strip_tags(trim($_POST['name'])));
-$posturl = mysqli_real_escape_string($connection, strip_tags(trim($_POST['url'])));
-$postnotes = mysqli_real_escape_string($connection, strip_tags(trim($_POST['notes'])));
-$shortdesc = mysqli_real_escape_string($connection, strip_tags(trim($_POST['shortdesc'])));
+<?php
+
+//GET AND STORE TITLE, URL, SHORTDESC, NOTES
+$sql_row_to_edit = 
+    "SELECT b.*
+    FROM $table_bm b
+    WHERE b.bmID = '" . $_SESSION['edit_bmID'] . "'";
+$result_row_to_edit = $connection->query($sql_row_to_edit);
+
+while($row = mysqli_fetch_assoc($result_row_to_edit)) {
+    $title = $row['bmTitle'];
+    $url = $row['bmURL'];
+    $shortdesc = $row['bmShortDesc'];
+    $notes =$row['bmNotes'];
+}
 
 
-//DELETE FROM MAP AND BOOKMARKS
+//GET AND STORE TAGS
+$sql_tags = 
+"SELECT b.bmID, t.tagID
+FROM $table_map bt, $table_bm b, $table_tags t
+WHERE bt.tagMapID = t.tagID
+AND bt.bmMapID = b.bmID
+AND b.bmID = '" . $_SESSION['edit_bmID'] . "'";
+$result_tags = $connection->query($sql_tags);
+
+
+while($row = mysqli_fetch_assoc($result_tags)) {
+    
+    if (isset($tags)) {
+        array_push($tags, $row['tagID']);
+    }
+    
+    if (!isset($tags)) {
+        $tags = array($row['tagID']);
+    }    
+}
+
+
+//IF TAGS WERE CHECKED
+if (!empty($_POST['tags'])) {
+    $tags = $_POST['tags'];
+    
+//IF NO NEW TAGS AND NO CHECKED TAGS
+} elseif (empty($_POST['newtag']) && empty($_POST['tags'])) {
+    if (!isset($tags)) {
+        if ($_SESSION['table'] == "a") {$post_tags = array("4");} //None defined
+        if ($_SESSION['table'] == "f") {$post_tags = array("17");} //None defined
+        if ($_SESSION['table'] == "r") {$post_tags = array("19");} //None defined
+    }
+}
+//OTHERWISE KEEP OLD TAG DATA
+
+
+//GET AND STORE NEW DATA FROM FORM
+if (!empty($_POST['name'])) {
+    $title = mysqli_real_escape_string($connection, strip_tags(trim($_POST['name'])));
+}
+
+if (!empty($_POST['url'])) {
+    $url = mysqli_real_escape_string($connection, strip_tags(trim($_POST['url'])));
+}
+
+if (!empty($_POST['notes'])) {
+    $notes = mysqli_real_escape_string($connection, strip_tags(trim($_POST['notes'])));
+}
+
+if (!empty($_POST['shortdesc'])) {
+    $shortdesc = mysqli_real_escape_string($connection, strip_tags(trim($_POST['shortdesc'])));
+}
+
+
+//DELETE FROM MAP
 $sql_delete_mapID =
 "DELETE FROM $table_map
 WHERE bmMapID = '".$_SESSION['edit_bmID']."'";    
+$connection->query($sql_delete_mapID);
     
-$sql_delete_bmID =
-"DELETE FROM $table_bm
+
+//UPDATE BOOKMARK
+$sql_update_bookmarks = 
+"UPDATE $table_bm
+SET bmTitle = '$title',
+bmURL = '$url',
+bmShortDesc = '$shortdesc',
+bmNotes = '$notes'
 WHERE bmID = '".$_SESSION['edit_bmID']."'";
-         
-if ($connection->query($sql_delete_mapID) === TRUE) {
-    if ($connection->query($sql_delete_bmID) === TRUE) {
-        $deleted_bookmark = "Deleted a bookmark and map.";
-    } else {
-        $deleted_bookmark = "Bookmark NOT deleted. Map IS deleted.";
-    }
-} else {
-    $deleted_bookmark = "Neither bookmark nor map deleted.";
-}   
-    
 
-    
-//CHECK IF TAGS WERE SELECTED
-if (isset($_POST['tags'])) {
-    $post_tags = $_POST['tags'];
-//CHECK IF NO NEW TAGS AND NO CHECKED TAGS
-} elseif (empty($_POST['newtag']) && empty($_POST['tags'])) {
-    if ($_SESSION['table'] == "a") {$post_tags = array("4");} //None defined
-    if ($_SESSION['table'] == "f") {$post_tags = array("17");} //None defined
-    if ($_SESSION['table'] == "r") {$post_tags = array("19");} //None defined
-}
-
-//ADD BOOKMARK, NEW TAG, AND MAP TOGETHER
-$sql_insert_bookmarks = 
-"INSERT INTO $table_bm (bmTitle, bmURL, bmShortDesc, bmNotes)
-VALUES ('$postname', '$posturl', '$shortdesc', '$postnotes')";
-
-if ($connection->query($sql_insert_bookmarks) === TRUE) {
-    //GET NEW BOOKMARK ID FOR USAGE IN MAP
-    $sql_get_bmID =
-    "SELECT bmID
-    FROM $table_bm
-    ORDER BY bmID DESC
-    LIMIT 1";
-    $new_bmID = mysqli_fetch_assoc($connection->query($sql_get_bmID));
-    $new_bmMapID = $new_bmID['bmID'];
+if ($connection->query($sql_update_bookmarks) === TRUE) {
 
     //CHECK IF NEW TAG WAS SUBMITTED AND CREATE SQL CODE
     if (!empty($_POST['newtag'])) {
@@ -73,35 +110,38 @@ if ($connection->query($sql_insert_bookmarks) === TRUE) {
             //LINK NEW TAG WITH NEW BOOKMARK
             $sql_insert_newtag_to_map =
             "INSERT INTO $table_map (bmMapID, tagMapID)
-            VALUES ($new_bmMapID, $newtag_id)";
+            VALUES ('".$_SESSION['edit_bmID']."', $newtag_id)";
             $connection->query($sql_insert_newtag_to_map);
         } else {
             echo "ERROR: New tag not inserted.";
         }
     }
     
-    if (isset($post_tags)) {
-        foreach ($post_tags as $tag) {
-            $sql_insert_a_map =
-                "INSERT INTO $table_map (bmMapID, tagMapID)
-                VALUES ($new_bmMapID, $tag)";
-            $connection->query($sql_insert_a_map);
-        }
+    //INSERT INTO MAP
+    foreach ($tags as $tag) {
+        $sql_insert_into_map =
+            "INSERT INTO $table_map (bmMapID, tagMapID)
+            VALUES ('".$_SESSION['edit_bmID']."', $tag)";
+        $connection->query($sql_insert_into_map);
     }
     
-    echo "<font color=\"#00b300\">Added new link: </font>" . $postname;
-} else {
-    echo "Something went wrong. Link not added.<br>" . $connection->error;
-}
-
-//GET ID OF NEW BOOKMARK
-$biggest_bmID_result = $connection->query(
+    
+    //GET ID OF NEW BOOKMARK
+    $biggest_bmID_result = $connection->query(
     "SELECT bmID
     FROM $table_bm
     ORDER BY bmID DESC
     LIMIT 1");
 
-$row = $biggest_bmID_result->fetch_assoc();
-echo " (Bookmark #" . $row['bmID'] . ")";
+    $row = $biggest_bmID_result->fetch_assoc();
+    $output_message = " (Bookmark #" . $row['bmID'] . ")" .
+            "<font color=\"#00b300\"> Update Succesful: </font>" . $title . " // ";
+} else {
+    $output_message = "<font color=\"#B30000\"> Update Failed: </font>" . $title . 
+    $connection->error;
+        
+}
+
+
   
 ?>
